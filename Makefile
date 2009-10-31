@@ -1,2 +1,3 @@
+PYTHON=python2.6
 test:
-	python3.1 tests/test_main.py
+	$(PYTHON) tests/test_main.py

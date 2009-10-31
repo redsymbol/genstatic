@@ -14,9 +14,11 @@ class ScratchdirTestCase(unittest.TestCase):
     debug = False
     def setUp(self):
         self.scratchdir = tempfile.mkdtemp()
+        if 'DEBUG' in os.environ:
+            print "scratch directory: %s" % self.scratchdir
 
     def tearDown(self):
-        if not self.debug:
+        if self.debug and 'DEBUG' not in os.environ:
             shutil.rmtree(self.scratchdir)
 
 class Test_prepare_output_dir(ScratchdirTestCase):
@@ -38,6 +40,7 @@ class Test_find_files(unittest.TestCase):
 
 expected_render_b = '''<html>
   <head>
+
 <style type="text/css">
   body {
   font-size: 18pt;
@@ -46,9 +49,12 @@ expected_render_b = '''<html>
   color: #222;
   }
 </style>
+
   </head>
   <body>
+
 <p>Hello Aaron.</p>
+
   </body>
 </html>'''
 

@@ -42,8 +42,11 @@ def dj_render(base, path, dest):
     path: path of template RELATIVE to base
     dest: location to write rendered output
     '''
+    from django.conf import settings
     from django.template.loader import render_to_string
-    rendered = render_to_string(os.path.join(base, path))
+    
+    settings.configure(TEMPLATE_DIRS=(base,))
+    rendered = render_to_string(path)
     with open(dest, 'w') as outf:
         outf.write(rendered)
         
