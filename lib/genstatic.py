@@ -12,10 +12,14 @@ class GSOptionParser(OptionParser):
         self.add_option('-c', '--clobber', action='store_true', default=False,
                         help='If dest_dir exists, erase it and recreate');
 
-def main(opts, args):
-    pass
-
 def find_files(base):
+    '''
+    Find suitable template files
+
+    Generates a list of paths relative to base.  Starts search under
+    base, ignoring any paths starting with underscores, and certain
+    other files.
+    '''
     def legit(path):
         if path.startswith('_') or path.endswith('~'):
             return False
@@ -29,7 +33,9 @@ def find_files(base):
             path = path.split(base)[-1]
             if legit(path):
                 yield path
-        
+
+def main(opts, args):
+    pass
 
 def prepare_output_dir(path):
     os.makedirs(path)
