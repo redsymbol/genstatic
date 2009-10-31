@@ -9,7 +9,8 @@ def is_dir(path):
     import stat
     return stat.S_ISDIR(os.stat(path)[stat.ST_MODE])
 
-class Test_prepare_output_dir(unittest.TestCase):
+
+class ScratchdirTestCase(unittest.TestCase):
     debug = False
     def setUp(self):
         self.scratchdir = tempfile.mkdtemp()
@@ -18,6 +19,7 @@ class Test_prepare_output_dir(unittest.TestCase):
         if not self.debug:
             shutil.rmtree(self.scratchdir)
 
+class Test_prepare_output_dir(ScratchdirTestCase):
     def test_prepare_output_dir(self):
         dir_a = os.path.join(self.scratchdir, 'a')
         self.assertFalse(os.path.exists(dir_a))
@@ -33,5 +35,32 @@ class Test_find_files(unittest.TestCase):
             'b.html',
             ])
         self.assertEqual(expected, actual)
+
+expected_render_b = '''<html>
+  <head>
+<style type="text/css">
+  body {
+  font-size: 18pt;
+  font-family: sans-serif;
+  background-color: #ccffcc;
+  color: #222;
+  }
+</style>
+  </head>
+  <body>
+<p>Hello Aaron.</p>
+  </body>
+</html>'''
+
+class Test_dj_render(ScratchdirTestCase):
+    def test_main(self):
+        dest = os.path.join(self.scratchdir, 'a.html')
+        genstatic.dj_render(
+            os.path.join(os.path.dirname(__file__), 'data', 'b'),
+            'a.html',
+            dest)
+        actual = open(dest).read()
+        self.assertEqual(expected_render_b, actual)
+
 if '__main__' == __name__:
     unittest.main()

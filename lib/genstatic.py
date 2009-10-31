@@ -34,6 +34,19 @@ def find_files(base):
             if legit(path):
                 yield path
 
+def dj_render(base, path, dest):
+    '''
+    Render a file using the Django template engine
+
+    base: template base directory
+    path: path of template RELATIVE to base
+    dest: location to write rendered output
+    '''
+    from django.template.loader import render_to_string
+    rendered = render_to_string(os.path.join(base, path))
+    with open(dest, 'w') as outf:
+        outf.write(rendered)
+        
 def main(opts, args):
     pass
 
