@@ -15,6 +15,22 @@ class GSOptionParser(OptionParser):
 def main(opts, args):
     pass
 
+def find_files(base):
+    def legit(path):
+        if path.startswith('_') or path.endswith('~'):
+            return False
+        return True
+    if not base.endswith('/'):
+        base += '/'
+    for dirpath, dirnames, filenames in os.walk(base):
+        for filename in filenames:
+            path = os.path.join(dirpath, filename)
+            assert path.startswith(base)
+            path = path.split(base)[-1]
+            if legit(path):
+                yield path
+        
+
 def prepare_output_dir(path):
     os.makedirs(path)
 

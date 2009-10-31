@@ -1,4 +1,4 @@
-from unittest import TestCase
+import unittest
 import os
 import tempfile
 import shutil
@@ -9,7 +9,7 @@ def is_dir(path):
     import stat
     return stat.S_ISDIR(os.stat(path)[stat.ST_MODE])
 
-class Test_prepare_output_dir(TestCase):
+class Test_prepare_output_dir(unittest.TestCase):
     debug = False
     def setUp(self):
         self.scratchdir = tempfile.mkdtemp()
@@ -24,7 +24,14 @@ class Test_prepare_output_dir(TestCase):
         r = genstatic.prepare_output_dir(os.path.join(self.scratchdir, 'a'))
         self.assertTrue(os.path.exists(dir_a))
         self.assertTrue(is_dir(dir_a))
-        
+
+class Test_find_files(unittest.TestCase):
+    def test_main(self):
+        actual = sorted(genstatic.find_files(os.path.join(os.path.dirname(__file__), 'data', 'a')))
+        expected = sorted([
+            'a.html',
+            'b.html',
+            ])
+        self.assertEqual(expected, actual)
 if '__main__' == __name__:
-    import unittest
     unittest.main()
