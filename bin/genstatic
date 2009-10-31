@@ -1,0 +1,15 @@
+#!/usr/bin/env python3.1
+from optparse import OptionParser
+class GSOptionParser(OptionParser):
+    def __init__(self):
+        super(GSOptionParser, self).__init__()
+        self.set_usage('usage: [-c] %prog templates_dir dest_dir')
+        self.add_option('-c', '--clobber', action='store_true', default=False,
+                        help='If dest_dir exists, erase it and recreate');
+
+def main(opts, args):
+    pass
+
+if '__main__' == __name__:
+    opts, args = GSOptionParser().parse_args()
+    main(opts, args)
