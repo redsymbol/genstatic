@@ -61,10 +61,9 @@ expected_render_b = '''<html>
 class Test_dj_render(ScratchdirTestCase):
     def test_main(self):
         dest = os.path.join(self.scratchdir, 'a.html')
-        genstatic.dj_render(
-            os.path.join(os.path.dirname(__file__), 'data', 'b'),
-            'a.html',
-            dest)
+        base = os.path.join(os.path.dirname(__file__), 'data', 'b')
+        genstatic.init_django(base)
+        genstatic.dj_render(base, 'a.html', dest)
         actual = open(dest).read()
         self.assertEqual(expected_render_b, actual)
 

@@ -7,7 +7,7 @@ __all__ = [
     ]
 class GSOptionParser(OptionParser):
     def __init__(self):
-        super(GSOptionParser, self).__init__()
+        OptionParser.__init__(self)
         self.set_usage('usage: [-c] %prog templates_dir dest_dir')
         self.add_option('-c', '--clobber', action='store_true', default=False,
                         help='If dest_dir exists, erase it and recreate');
@@ -34,6 +34,11 @@ def find_files(base):
             if legit(path):
                 yield path
 
+
+def init_django(base):
+    from django.conf import settings
+    settings.configure(TEMPLATE_DIRS=(base,))
+
 def dj_render(base, path, dest):
     '''
     Render a file using the Django template engine
@@ -42,17 +47,27 @@ def dj_render(base, path, dest):
     path: path of template RELATIVE to base
     dest: location to write rendered output
     '''
-    from django.conf import settings
     from django.template.loader import render_to_string
-    
-    settings.configure(TEMPLATE_DIRS=(base,))
     rendered = render_to_string(path)
     with open(dest, 'w') as outf:
         outf.write(rendered)
         
 def main(opts, args):
-    pass
+    base, out = args[0], args[1]
+    init_django(base)
+    prepare_output_dir(out)
+    for item in find_files(base):
+        dest = os.path.join(out, item)
+        mkdir(os.path.dirname(dest))
+        dj_render(base, item, dest)
 
+def mkdir(path):
+    try:
+        os.makedirs(path)
+    except OSError, e:
+        # Ignore it if the file already exists
+        if 17 != e.errno:
+            raise
+    
 def prepare_output_dir(path):
-    os.makedirs(path)
-
+    mkdir(path)
