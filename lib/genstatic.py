@@ -1,4 +1,6 @@
+from __future__ import unicode_literals
 import os
+import shutil
 from optparse import OptionParser
 __all__ = [
     'main',
@@ -52,15 +54,6 @@ def dj_render(base, path, dest):
     with open(dest, 'w') as outf:
         outf.write(rendered)
         
-def main(opts, args):
-    base, out = args[0], args[1]
-    init_django(base)
-    prepare_output_dir(out)
-    for item in find_files(base):
-        dest = os.path.join(out, item)
-        mkdir(os.path.dirname(dest))
-        dj_render(base, item, dest)
-
 def mkdir(path):
     try:
         os.makedirs(path)
@@ -71,3 +64,21 @@ def mkdir(path):
     
 def prepare_output_dir(path):
     mkdir(path)
+
+def main(opts, args):
+    base, out = args[0], args[1]
+    init_django(base)
+    prepare_output_dir(out)
+    process(base, out)
+
+def process(base, out):
+    for item in find_files(base):
+        dest = os.path.join(out, item)
+        mkdir(os.path.dirname(dest))
+        try:
+            if item.endswith('.htm') or item.endswith('.html'):
+                dj_render(base, item, dest)
+            else:
+                shutil.copyfile(os.path.join(base, item), dest)
+        except Exception, e:
+            print "ERROR: %s: %s" % (item, e)
