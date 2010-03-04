@@ -76,7 +76,7 @@ def process(base, out):
         dest = os.path.join(out, item)
         mkdir(os.path.dirname(dest))
         try:
-            if item.endswith('.htm') or item.endswith('.html'):
+            if item.endswith('.htm') or item.endswith('.html') or item.endswith('.php'):
                 dj_render(base, item, dest)
             else:
                 shutil.copyfile(os.path.join(base, item), dest)
