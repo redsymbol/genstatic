@@ -13,6 +13,8 @@ class GSOptionParser(OptionParser):
         self.set_usage('usage: [-c] %prog templates_dir dest_dir')
         self.add_option('-c', '--clobber', action='store_true', default=False,
                         help='If dest_dir exists, erase it and recreate');
+        self.add_option('-d', '--defines', default=None,
+                        help='Module with definitions for template');
 
 def find_files(base):
     '''
@@ -41,7 +43,7 @@ def init_django(base):
     from django.conf import settings
     settings.configure(TEMPLATE_DIRS=(base,))
 
-def dj_render(base, path, dest):
+def dj_render(base, path, dest, params=None):
     '''
     Render a file using the Django template engine
 
@@ -50,7 +52,9 @@ def dj_render(base, path, dest):
     dest: location to write rendered output
     '''
     from django.template.loader import render_to_string
-    rendered = render_to_string(path)
+    if not params:
+        params = {}
+    rendered = render_to_string(path, params)
     with open(dest, 'w') as outf:
         outf.write(rendered)
         
@@ -65,19 +69,18 @@ def mkdir(path):
 def prepare_output_dir(path):
     mkdir(path)
 
-def main(opts, args):
-    base, out = args[0], args[1]
+def main(opts, base, out, params):
     init_django(base)
     prepare_output_dir(out)
-    process(base, out)
+    process(base, out, params)
 
-def process(base, out):
+def process(base, out, params):
     for item in find_files(base):
         dest = os.path.join(out, item)
         mkdir(os.path.dirname(dest))
         try:
             if item.endswith('.htm') or item.endswith('.html') or item.endswith('.php'):
-                dj_render(base, item, dest)
+                dj_render(base, item, dest, params)
             else:
                 shutil.copyfile(os.path.join(base, item), dest)
         except Exception, e:
