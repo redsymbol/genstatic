@@ -1,12 +1,11 @@
 #!/usr/bin/env python2.6
 from genstatic import *
 if '__main__' == __name__:
+    # TODO: make genstatic be able to use filters/tags (e.g. tel)
     opts, args = GSOptionParser().parse_args()
     base, out = args[0], args[1]
-    # TODO: let params be passed in externally
-    # TODO: make genstatic be able to use filters/tags (e.g. tel)
-    params = {
-        'MU_SIGNUP_URL' : 'https://clscsionline.ucsf.edu//Members/PR/ProgramDetails.aspx?enc=JPORqhaMghKruXncpLHltV/toVS8AYN0qc6LhKAC61zGxHcSN40ePqEAzsmx46Y5cu7Jcu4nt+EG38X9FP2eexWvHjQgJjwBMubh4s55bNx85hOIp30clqKIclxYMYAintu5eEL+n5jP+1Pz6BFgf64RgqgEmAkzaZ6ohLtiQidl5PTkGyq7VXwn0LxMbZPNgoT4bM3aJjnMrFnfGbikzfbBYEGw+dbLfMIYAiXxrVf1lzOZ6DF4sOyonGGPqTaTYNG7Y4wd3s7+brrRdeA9J42zI1qjcBEBhNchAVR2eVCd/hSPIzU5phW/fQgsa9PQ72ZsfLnWCgGHmISjixB7g4wQFX6Coc2MonnU2LpDw90U6anrWQuh5nodYaCfG013+1NHPPdFF8RM/PjxEEgrNb3jvSD3tlIqHyDd+6lA6XerP8C/Y5UW0Pt4hI3MI3xjpXUnieQtHmpewc7vX4pDxgLsErGDlyE9C8OZ7t92R+qzVeVi0WCP9rdAkfFQ5rytWFCWAyUKg7Sz+L3EofY/yTRisu7+DVxfhjpRFSWcOrIL3xC0D1vs2iej/8G+SQ8jEbQcQcG2bDFiYKna9eaOgQ==',
-        #'MU_SIGNUP_URL' : 'https://clscsionline.ucsf.edu//Members/PR/CourseList.aspx',
-        }
+    if opts.defines:
+        params = load_params(opts.defines)
+    else:
+        params = {}
     main(opts, base, out, params)

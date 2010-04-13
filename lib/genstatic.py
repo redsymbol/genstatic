@@ -1,11 +1,13 @@
 from __future__ import unicode_literals
 import os
 import shutil
+import sys
 from optparse import OptionParser
 __all__ = [
     'main',
     'GSOptionParser',
     'prepare_output_dir',
+    'load_params',
     ]
 class GSOptionParser(OptionParser):
     def __init__(self):
@@ -85,3 +87,25 @@ def process(base, out, params):
                 shutil.copyfile(os.path.join(base, item), dest)
         except Exception, e:
             print "ERROR: %s: %s" % (item, e)
+
+def load_params(module):
+    import imp
+    fp = None
+    loaded = None
+    params = {}
+    imp.acquire_lock()
+    try:
+        fp, pathname, description = imp.find_module(module)
+        loaded = imp.load_module(module, fp, pathname, description)
+    except ImportError:
+        pass
+    finally:
+        imp.release_lock()
+        if hasattr(fp, 'close'):
+            fp.close()
+    if loaded:
+        params = dict((k,v) for k, v in loaded.__dict__.iteritems()
+                     if not k.startswith('__'))
+    else:
+        sys.stderr.write('\ngenstatic: Cannot import definition module "%s"\n' % str(module))
+    return params
