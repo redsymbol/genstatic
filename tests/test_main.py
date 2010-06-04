@@ -98,5 +98,22 @@ class Test_dj_render(ScratchdirTestCase):
             actual = open(os.path.join(self.scratchdir, item)).read()
             self.assertEqual(unrendered_value, actual)
 
+class Test_misc(unittest.TestCase):
+    def test_path2mod_ok(self):
+        from genstatic import path2mod
+        testdata = [
+            {'path' : 'foo.py',
+             'mod'  : 'foo',
+             },
+            {'path' : 'baz/foo.py',
+             'mod'  : 'foo',
+             },
+            ]
+        for ii, td in enumerate(testdata):
+            expected = td['mod']
+            actual = path2mod(td['path'])
+            msg = 'e: %s, a: %s [%d]' % (expected, actual, ii)
+            self.assertEqual(expected, actual, msg)
+
 if '__main__' == __name__:
     unittest.main()
