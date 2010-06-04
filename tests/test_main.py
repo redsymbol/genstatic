@@ -77,7 +77,7 @@ class Test_dj_render(ScratchdirTestCase):
         'test: pass through items not recognized as straight-up HTML'
         base = os.path.join(os.path.dirname(__file__), 'data', 'c')
         self.init_django(base)
-        process(base, self.scratchdir)
+        process(base, self.scratchdir, {})
         created = sorted(os.listdir(self.scratchdir))
         rendered_value = '<html><body>Rendered!</body></html>'
         unrendered_value = '{% extends "_/base.html" %}'
