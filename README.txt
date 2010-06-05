@@ -1,12 +1,14 @@
 genstatic - Generate and maintain large sets of static HTML files, without going insane
 
 Genstatic is a tool for generating and managing sets of static HTML
-files using the Django template system.  It's quite useful when you
-need to create a set of HTML files that share structural similarities,
-in a low-maintenance way.  It's EXTREMELY useful when, as a web
-designer, you are serving a client who hands you a very messy folder
-of static files for their existing website, and you need to modify or
-work with them, without going crazy.
+files using the Django template system.  
+
+It's quite useful when you need to create a set of HTML files that
+share structural similarities, in a low-maintenance way.  It's
+EXTREMELY useful when, as a web designer, you are serving a client who
+hands you a very messy folder of static files for their existing
+website, and you need to extensively modify them, or clean them all
+up.
 
 Genstatic is not limited to HTML files.  You can use it to generate
 CSS, Javascript, plain text, or whatever you need.
@@ -34,11 +36,12 @@ not overwritten.  Override that with the --clobber option.)
 
 Often, you will like to set variable names and values that are
 available to the templates.  Create a python file that defines these
-variables - for example, "myparams.py" .  The pass this file name with
-the -d option to genstatic.
+variables - for example, "myparams.py" .  Then pass this file name
+with the -d option to genstatic.
 
-(You will have to use Python syntax, which most IT workers
-find very straightforward.  See Appendix A for a primer.)
+(You will have to use Python syntax.  If you're the type of person who
+wants to use genstatic, you will probably find this very easy to pick
+up.  See Appendix A for a primer.)
 
 HOW ABOUT AN EXAMPLE
 
@@ -171,3 +174,9 @@ number, or a string (surrounded by either single or double quotes).
 Single and double quotes are equivalent in python, and they both
 interpolate.  So you'll need to backslash-escape any special
 characters.
+
+Python has sequence and collection types as well - lists and
+dictionaries (associative arrays), etc.  You can certainly define
+variables of these types, even write arbitrary Python code to generate
+what you want.  Dig deeper into the Python tutorial above if you'd
+like to know how to do this.
