@@ -133,40 +133,50 @@ def process(base, out, params):
         except Exception, e:
             write_err("ERROR: %s: %s" % (item, e))
 
-def path2mod(path):
+def path2mod(filepath):
     '''
-    Convert a Python file path to a module name
+    Convert a Python file path to a module name, and its import path
 
     @param path : Path to python file
     @type  path : str
 
-    @return     : module name
-    @rtype      : str
+    @return     : Tuple of module name, and module path
+    @rtype      : tuple(str, str)
 
     '''
-    assert path.endswith('.py')
-    return path[:-3].split('/')[-1]
+    assert filepath.endswith('.py')
+    modpath, modname = os.path.split(filepath[:-3])
+    if not modpath:
+        modpath = '.'
+    return modname, modpath
 
-def load_params(module):
+def load_params(modulearg):
     '''
     Load template variables and their values
 
-    @param module : Module name
-    @type  module : str
+    The module argument can be a module name (like "foo.bar", or
+    "baz"), or a path to a Python file ('/path/to/stuff.py').
 
-    @return       : Variables and their values
-    @rtype        : dict (str -> mixed)
+    @param modulearg : Module argument as supplied by user
+    @type  modulearg : str
+
+    @return          : Variables and their values
+    @rtype           : dict (str -> mixed)
 
     '''
     import imp
-    if module.endswith('.py'):
-        module = path2mod(module)
     fp = None
     loaded = None
     params = {}
+    pythonpath = None
+    if modulearg.endswith('.py'):
+        module, modpath = path2mod(modulearg)
+        pythonpath = [modpath]
+    else:
+        module = modulearg
     imp.acquire_lock()
     try:
-        fp, pathname, description = imp.find_module(module)
+        fp, pathname, description = imp.find_module(module, pythonpath)
         loaded = imp.load_module(module, fp, pathname, description)
     except ImportError:
         pass
@@ -178,7 +188,7 @@ def load_params(module):
         params = dict((k,v) for k, v in loaded.__dict__.iteritems()
                      if not k.startswith('__'))
     else:
-        write_err('genstatic: Cannot import definition module "%s"\n' % str(module))
+        write_err('genstatic: Cannot import definition module/file "%s"\n' % str(modulearg))
     return params
 
 def main(opts, base, out, params):
