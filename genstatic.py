@@ -4,12 +4,7 @@ import os
 import shutil
 import sys
 from optparse import OptionParser
-__all__ = [
-    'main',
-    'GSOptionParser',
-    'prepare_output_dir',
-    'load_params',
-    ]
+
 class GSOptionParser(OptionParser):
     def __init__(self):
         OptionParser.__init__(self)
