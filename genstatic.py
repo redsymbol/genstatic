@@ -157,11 +157,13 @@ def load_params(modulearg):
     The module argument can be a module name (like "foo.bar", or
     "baz"), or a path to a Python file ('/path/to/stuff.py').
 
-    @param modulearg : Module argument as supplied by user
-    @type  modulearg : str
+    @param modulearg   : Module argument as supplied by user
+    @type  modulearg   : str
 
-    @return          : Variables and their values
-    @rtype           : dict (str -> mixed)
+    @return            : Variables and their values
+    @rtype             : dict (str -> mixed)
+
+    @raise ImportError : The module could not be loaded.
 
     '''
     import imp
@@ -178,17 +180,14 @@ def load_params(modulearg):
     try:
         fp, pathname, description = imp.find_module(module, pythonpath)
         loaded = imp.load_module(module, fp, pathname, description)
-    except ImportError:
-        pass
     finally:
+        # If there is any ImportError, just let it propagate.  but need to clean up first
         imp.release_lock()
         if hasattr(fp, 'close'):
             fp.close()
-    if loaded:
-        params = dict((k,v) for k, v in loaded.__dict__.iteritems()
-                     if not k.startswith('__'))
-    else:
-        write_err('genstatic: Cannot import definition module/file "%s"\n' % str(modulearg))
+    assert loaded
+    params = dict((k,v) for k, v in loaded.__dict__.iteritems()
+                  if not k.startswith('__'))
     return params
 
 def main(opts, base, out, params):
@@ -216,8 +215,9 @@ if '__main__' == __name__:
     # TODO: make genstatic be able to use external apps' filters/tags
     opts, args = GSOptionParser().parse_args()
     base, out = args[0], args[1]
-    if opts.defines:
+    try:
         params = load_params(opts.defines)
-    else:
+    except ImportError:
+        write_err('genstatic: Cannot import definition module/file "%s"\n' % str(opts.defines))
         params = {}
     main(opts, base, out, params)
