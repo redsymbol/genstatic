@@ -86,9 +86,9 @@ def path2mod(path):
     return path[:-3].split('/')[-1]
 
 def load_params(module):
+    import imp
     if module.endswith('.py'):
         module = path2mod(module)
-    import imp
     fp = None
     loaded = None
     params = {}
@@ -107,6 +107,7 @@ def load_params(module):
                      if not k.startswith('__'))
     else:
         sys.stderr.write('genstatic: Cannot import definition module "%s"\n' % str(module))
+        sys.stderr.flush()
     return params
 
 if '__main__' == __name__:
