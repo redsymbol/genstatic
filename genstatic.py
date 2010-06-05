@@ -1,3 +1,4 @@
+#!/usr/bin/env python2.6
 from __future__ import unicode_literals
 import os
 import shutil
@@ -87,6 +88,7 @@ def process(base, out, params):
                 shutil.copyfile(os.path.join(base, item), dest)
         except Exception, e:
             print "ERROR: %s: %s" % (item, e)
+
 def path2mod(path):
     assert path.endswith('.py')
     return path[:-3].split('/')[-1]
