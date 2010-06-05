@@ -1,15 +1,15 @@
 genstatic - Generate and maintain large sets of static HTML files, without going insane
 
-Genstatic is a tool for generating sets of static HTML files using the
-Django template system.  It's quite useful when you need to create a
-set of HTML files that share structural similarities, in a
-low-maintenance way.  It's EXTREMELY useful when, as a web designer,
-you are serving a client who hands you a very messy folder of static
-files for their existing website, and you need to modify or work with
-them, without going crazy.
+Genstatic is a tool for generating and managing sets of static HTML
+files using the Django template system.  It's quite useful when you
+need to create a set of HTML files that share structural similarities,
+in a low-maintenance way.  It's EXTREMELY useful when, as a web
+designer, you are serving a client who hands you a very messy folder
+of static files for their existing website, and you need to modify or
+work with them, without going crazy.
 
 Genstatic is not limited to HTML files.  You can use it to generate
-CSS, Javascript, README.txt, or whatever you want.
+CSS, Javascript, plain text, or whatever you need.
 
 Genstatic is based on Django templates, and lets you leverage some of
 its powerful features: template inheritance, template variables, and a
@@ -19,9 +19,9 @@ at http://docs.djangoproject.com/en/1.2/topics/templates/ .
 OVERVIEW
 
 Usage:
-  genstatic [options] srcdir destdir
+  genstatic.py [options] srcdir destdir
 
-For a full list of options, execute "genstatic -h".
+For a full list of options, execute "genstatic.py -h".
 
 srcdir and destdir are directories.  srcdir contains static files and
 Django templates.  It normally also contains a magic subdirectory,
@@ -87,7 +87,7 @@ You also create a file named vars.py that just contains this line:
 copydate=2010
 
 Simply invoke on the command line:
-  genstatic -d copydate.py srcdir destdir
+  genstatic.py -d copydate.py srcdir destdir
 
 destdir is created, containing index.html and about.html, and that's
 it - base.html is omitted.  Here's what those files will contain:
