@@ -6,6 +6,9 @@ import sys
 from optparse import OptionParser
 
 class GSOptionParser(OptionParser):
+    '''
+    command line option parser
+    '''
     def __init__(self):
         OptionParser.__init__(self)
         self.set_usage('usage: [-c] %prog templates_dir dest_dir')
@@ -21,6 +24,13 @@ def find_files(base):
     Generates a list of paths relative to base.  Starts search under
     base, ignoring any paths starting with underscores, and certain
     other files.
+
+    @param base : Path to base directory to begin search
+    @type  base : str
+
+    @return     : List of paths to temmplate files
+    @rtype      : list of str
+
     '''
     def legit(path):
         if path.startswith('_') or path.endswith('~'):
@@ -38,6 +48,13 @@ def find_files(base):
 
 
 def init_django(base):
+    '''
+    Initialize django
+
+    @param base : Path to base directory to begin search
+    @type  base : str
+
+    '''
     from django.conf import settings
     settings.configure(TEMPLATE_DIRS=(base,))
 
@@ -45,9 +62,18 @@ def dj_render(base, path, dest, params=None):
     '''
     Render a file using the Django template engine
 
-    base: template base directory
-    path: path of template RELATIVE to base
-    dest: location to write rendered output
+    @param base   : path to template base directory
+    @type  base   : str
+
+    @param path   : path of template RELATIVE to base
+    @type  path   : str
+
+    @param dest   : location to write rendered output (path to a file)
+    @type  dest   : str
+
+    @param params : Template variables
+    @type  params : dict (str -> mixed)
+
     '''
     from django.template.loader import render_to_string
     if not params:
@@ -57,6 +83,13 @@ def dj_render(base, path, dest, params=None):
         outf.write(rendered)
         
 def mkdir(path):
+    '''
+    Safely make sure a directory exists, creating it if necessary
+
+    @param path : Path to directory to create
+    @type  path : str
+
+    '''
     try:
         os.makedirs(path)
     except OSError, e:
@@ -65,11 +98,40 @@ def mkdir(path):
             raise
     
 def main(opts, base, out, params):
+    '''
+    Main program runner
+
+    @param opts   : options
+    @type  opts   : ?
+
+    @param base   : path to template base directory
+    @type  base   : str
+
+    @param out    : location to write output files (path to dir)
+    @type  out    : str
+
+    @param params : Template variables
+    @type  params : dict (str -> mixed)
+
+    '''
     init_django(base)
     mkdir(out)
     process(base, out, params)
 
 def process(base, out, params):
+    '''
+    Render and write all output files
+
+    @param base   : path to template base directory
+    @type  base   : str
+
+    @param out    : location to write output files (path to dir)
+    @type  out    : str
+
+    @param params : Template variables
+    @type  params : dict (str -> mixed)
+
+    '''
     for item in find_files(base):
         dest = os.path.join(out, item)
         mkdir(os.path.dirname(dest))
@@ -82,10 +144,30 @@ def process(base, out, params):
             print "ERROR: %s: %s" % (item, e)
 
 def path2mod(path):
+    '''
+    Convert a path to a Python file to a module name
+
+    @param path : Path to python file
+    @type  path : str
+
+    @return     : module name
+    @rtype      : str
+
+    '''
     assert path.endswith('.py')
     return path[:-3].split('/')[-1]
 
 def load_params(module):
+    '''
+    Load template variables and their values
+
+    @param module : Module name
+    @type  module : str
+
+    @return       : Variables and their values
+    @rtype        : dict (str -> mixed)
+
+    '''
     import imp
     if module.endswith('.py'):
         module = path2mod(module)
