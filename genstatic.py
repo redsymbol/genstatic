@@ -97,27 +97,6 @@ def mkdir(path):
         if 17 != e.errno:
             raise
     
-def main(opts, base, out, params):
-    '''
-    Main program runner
-
-    @param opts   : options
-    @type  opts   : ?
-
-    @param base   : path to template base directory
-    @type  base   : str
-
-    @param out    : location to write output files (path to dir)
-    @type  out    : str
-
-    @param params : Template variables
-    @type  params : dict (str -> mixed)
-
-    '''
-    init_django(base)
-    mkdir(out)
-    process(base, out, params)
-
 def process(base, out, params):
     '''
     Render and write all output files
@@ -191,6 +170,27 @@ def load_params(module):
         sys.stderr.write('genstatic: Cannot import definition module "%s"\n' % str(module))
         sys.stderr.flush()
     return params
+
+def main(opts, base, out, params):
+    '''
+    Main program runner
+
+    @param opts   : options
+    @type  opts   : ?
+
+    @param base   : path to template base directory
+    @type  base   : str
+
+    @param out    : location to write output files (path to dir)
+    @type  out    : str
+
+    @param params : Template variables
+    @type  params : dict (str -> mixed)
+
+    '''
+    init_django(base)
+    mkdir(out)
+    process(base, out, params)
 
 if '__main__' == __name__:
     # TODO: make genstatic be able to use external apps' filters/tags
