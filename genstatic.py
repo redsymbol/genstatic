@@ -64,12 +64,9 @@ def mkdir(path):
         if 17 != e.errno:
             raise
     
-def prepare_output_dir(path):
-    mkdir(path)
-
 def main(opts, base, out, params):
     init_django(base)
-    prepare_output_dir(out)
+    mkdir(out)
     process(base, out, params)
 
 def process(base, out, params):
