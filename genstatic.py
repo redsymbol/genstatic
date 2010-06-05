@@ -17,6 +17,17 @@ class GSOptionParser(OptionParser):
         self.add_option('-d', '--defines', default=None,
                         help='Module with definitions for template');
 
+def write_err(msg):
+    '''
+    Write an error message to console
+
+    @param msg : The message to report
+    @type  msg : str
+
+    '''
+    sys.stderr.write(msg)
+    sys.stderr.flush()
+
 def find_files(base):
     '''
     Find suitable template files
@@ -120,7 +131,7 @@ def process(base, out, params):
             else:
                 shutil.copyfile(os.path.join(base, item), dest)
         except Exception, e:
-            print "ERROR: %s: %s" % (item, e)
+            write_err("ERROR: %s: %s" % (item, e))
 
 def path2mod(path):
     '''
@@ -167,8 +178,7 @@ def load_params(module):
         params = dict((k,v) for k, v in loaded.__dict__.iteritems()
                      if not k.startswith('__'))
     else:
-        sys.stderr.write('genstatic: Cannot import definition module "%s"\n' % str(module))
-        sys.stderr.flush()
+        write_err('genstatic: Cannot import definition module "%s"\n' % str(module))
     return params
 
 def main(opts, base, out, params):
