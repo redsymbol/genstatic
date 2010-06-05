@@ -149,3 +149,25 @@ genstatic development.  If you or someone you know needs to upgrade a
 website for mobile phones, or start a mobile marketing campaign,
 contact Mobile Web Up today.
 
+APPENDIX A: PYTHON VARIABLES
+
+To make varibles available to genstatic (with the -d option), you'll
+have to create a small Python file that defines some variables and
+their values.  It's not too hard.
+
+The official Python tutorial has a section, "Using Python as a
+calculator", that is very nice, and can teach you all you'll need to
+know.  Read it here:
+http://docs.python.org/tutorial/introduction.html#using-python-as-a-calculator
+
+Short version: you can just create a file named "something.py", and
+put in some lines like this:
+
+name = value
+
+... where 'name' is a variable name, and 'value' is what the variable
+is set to.  'value' can be a whole number (integer), a floating-point
+number, or a string (surrounded by either single or double quotes).
+Single and double quotes are equivalent in python, and they both
+interpolate.  So you'll need to backslash-escape any special
+characters.
