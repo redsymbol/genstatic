@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GENSTATIC=../bin/genstatic.sh
+GENSTATIC=../genstatic.py
 OUT=$(mktemp -d)
 echo "Test output dir: $OUT"
 
