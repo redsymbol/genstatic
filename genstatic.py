@@ -135,7 +135,7 @@ def process(base, out, params):
 
 def path2mod(path):
     '''
-    Convert a path to a Python file to a module name
+    Convert a Python file path to a module name
 
     @param path : Path to python file
     @type  path : str
