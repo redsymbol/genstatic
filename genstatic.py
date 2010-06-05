@@ -106,7 +106,7 @@ def load_params(module):
         params = dict((k,v) for k, v in loaded.__dict__.iteritems()
                      if not k.startswith('__'))
     else:
-        sys.stderr.write('\ngenstatic: Cannot import definition module "%s"\n' % str(module))
+        sys.stderr.write('genstatic: Cannot import definition module "%s"\n' % str(module))
     return params
 
 if '__main__' == __name__:
