@@ -114,3 +114,13 @@ def load_params(module):
     else:
         sys.stderr.write('\ngenstatic: Cannot import definition module "%s"\n' % str(module))
     return params
+
+if '__main__' == __name__:
+    # TODO: make genstatic be able to use external apps' filters/tags
+    opts, args = GSOptionParser().parse_args()
+    base, out = args[0], args[1]
+    if opts.defines:
+        params = load_params(opts.defines)
+    else:
+        params = {}
+    main(opts, base, out, params)
