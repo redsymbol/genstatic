@@ -1,22 +1,29 @@
 genstatic - Generate and maintain large sets of static HTML files, without going insane
 
 Genstatic is a tool for generating and managing sets of static HTML
-files using the Django template system.  
+files using the Django template system.  It exists to save web
+designers like yourself time and sanity.
 
-It's quite useful when you need to create a set of HTML files that
-share structural similarities, in a low-maintenance way.  It's
-EXTREMELY useful when, as a web designer, you are serving a client who
-hands you a very messy folder of static files for their existing
-website, and you need to extensively modify them, or clean them all
-up.
+It's useful when you need to create a set of HTML files sharing
+structural similarities, in a low-maintenance way.  You can do things
+like change the doctype of 100 different HTML files, or change the
+year of the copyright date in all their footers, by making a minor
+change to one file.
+
+It's also proved EXTREMELY useful when, as a web designer, you are
+serving a client who hands you a very messy folder of static files for
+their existing website.  You can use genstatic to bring order to that
+chaos, and modify them with much less time and duplication of your
+effort.
 
 Genstatic is not limited to HTML files.  You can use it to generate
-CSS, Javascript, plain text, or whatever you need.
+CSS, Javascript, plain text - essentially whatever textual format you
+need.
 
 Genstatic is based on Django templates, and lets you leverage some of
 its powerful features: template inheritance, template variables, and a
-rich built-in template library (of "tags" and "filters").  Learn more
-at http://docs.djangoproject.com/en/1.2/topics/templates/ .
+rich built-in function library (Django's "tags" and "filters").  Learn
+more at http://docs.djangoproject.com/en/1.2/topics/templates/ .
 
 OVERVIEW
 
@@ -39,9 +46,10 @@ available to the templates.  Create a python file that defines these
 variables - for example, "myparams.py" .  Then pass this file name
 with the -d option to genstatic.
 
-(You will have to use Python syntax.  If you're the type of person who
-wants to use genstatic, you will probably find this very easy to pick
-up.  See Appendix A for a primer.)
+(You must use Python syntax in this file.  Not a "Pythonista"? Don't
+worry; if you're the type of person who wants to use genstatic, you
+will probably find the variable syntax very easy to pick up.  See
+Appendix A for a primer.)
 
 HOW ABOUT AN EXAMPLE
 
@@ -93,7 +101,7 @@ Simply invoke on the command line:
   genstatic.py -d copydate.py srcdir destdir
 
 destdir is created, containing index.html and about.html, and that's
-it - base.html is omitted.  Here's what those files will contain:
+it;  base.html is omitted.  Here's what those two files will contain:
 
 index.html:
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
