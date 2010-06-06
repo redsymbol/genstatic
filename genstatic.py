@@ -107,22 +107,22 @@ def mkdir(path):
         if 17 != e.errno:
             raise
     
-def process(base, out, params):
+def process(base, outdir, params):
     '''
     Render and write all output files
 
     @param base   : path to template base directory
     @type  base   : str
 
-    @param out    : location to write output files (path to dir)
-    @type  out    : str
+    @param outdir : location to write output files (path to dir)
+    @type  outdir : str
 
     @param params : Template variables
     @type  params : dict (str -> mixed)
 
     '''
     for item in find_files(base):
-        dest = os.path.join(out, item)
+        dest = os.path.join(outdir, item)
         mkdir(os.path.dirname(dest))
         try:
             if item.endswith('.htm') or item.endswith('.html') or item.endswith('.php'):
@@ -189,7 +189,7 @@ def load_params(modulearg):
                   if not k.startswith('__'))
     return params
 
-def main(opts, base, out, params):
+def main(opts, base, outdir, params):
     '''
     Main program runner
 
@@ -199,23 +199,23 @@ def main(opts, base, out, params):
     @param base   : path to template base directory
     @type  base   : str
 
-    @param out    : location to write output files (path to dir)
-    @type  out    : str
+    @param outdir : location to write output files (path to dir)
+    @type  outdir : str
 
     @param params : Template variables
     @type  params : dict (str -> mixed)
 
     '''
     init_django(base)
-    mkdir(out)
-    process(base, out, params)
+    mkdir(outdir)
+    process(base, outdir, params)
 
 if '__main__' == __name__:
     opts, args = GSOptionParser().parse_args()
-    base, out = args[0], args[1]
+    base, outdir = args[0], args[1]
     try:
         params = load_params(opts.defines)
     except ImportError:
         write_err('genstatic: Cannot import definition module/file "%s"\n' % str(opts.defines))
         params = {}
-    main(opts, base, out, params)
+    main(opts, base, outdir, params)
