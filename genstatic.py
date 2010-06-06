@@ -57,7 +57,6 @@ def find_files(base):
             if legit(path):
                 yield path
 
-
 def init_django(base):
     '''
     Initialize django
@@ -212,7 +211,6 @@ def main(opts, base, out, params):
     process(base, out, params)
 
 if '__main__' == __name__:
-    # TODO: make genstatic be able to use external apps' filters/tags
     opts, args = GSOptionParser().parse_args()
     base, out = args[0], args[1]
     try:
