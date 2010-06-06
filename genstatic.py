@@ -5,13 +5,15 @@ import shutil
 import sys
 from optparse import OptionParser
 
+USAGE_MSG = 'usage: [-c] %s templates_dir dest_dir'
+
 class GSOptionParser(OptionParser):
     '''
     command line option parser
     '''
     def __init__(self):
         OptionParser.__init__(self)
-        self.set_usage('usage: [-c] %prog templates_dir dest_dir')
+        self.set_usage(USAGE_MSG % '%prog')
         self.add_option('-c', '--clobber', action='store_true', default=False,
                         help='If dest_dir exists, erase it and recreate');
         self.add_option('-d', '--defines', default=None,
@@ -210,9 +212,23 @@ def main(opts, base, outdir, params):
     mkdir(outdir)
     process(base, outdir, params)
 
+def exit_usage(retcode=0):
+    '''
+    Emit a usage message, then exit.
+
+    @param retcode : Process return code
+    @type  retcode : int
+    
+    '''
+    print USAGE_MSG % os.path.basename(sys.argv[0])
+    sys.exit(retcode)
+
 if '__main__' == __name__:
     opts, args = GSOptionParser().parse_args()
-    base, outdir = args[0], args[1]
+    try:
+        base, outdir = args[0], args[1]
+    except IndexError:
+        exit_usage()
     try:
         params = load_params(opts.defines)
     except ImportError:
