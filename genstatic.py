@@ -226,7 +226,7 @@ def exit_usage(retcode=0):
 if '__main__' == __name__:
     opts, args = GSOptionParser().parse_args()
     try:
-        base, outdir = args[0], args[1]
+        srcdir, outdir = args[0], args[1]
     except IndexError:
         exit_usage()
     try:
@@ -234,4 +234,4 @@ if '__main__' == __name__:
     except ImportError:
         write_err('genstatic: Cannot import definition module/file "%s"\n' % str(opts.defines))
         params = {}
-    main(opts, base, outdir, params)
+    main(opts, srcdir, outdir, params)
