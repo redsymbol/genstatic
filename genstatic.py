@@ -16,8 +16,8 @@ class GSOptionParser(OptionParser):
         self.set_usage(USAGE_MSG % '%prog')
         self.add_option('-c', '--clobber', action='store_true', default=False,
                         help='If dest_dir exists, erase it and recreate');
-        self.add_option('-d', '--defines', default=None,
-                        help='Module with definitions for template');
+        self.add_option('-v', '--vars-module', default=None,
+                        help='Module with variable definitions for template');
 
 def write_err(msg):
     '''
@@ -240,9 +240,9 @@ if '__main__' == __name__:
     except IndexError:
         exit_usage()
     params = {}
-    if opts.defines:
+    if opts.vars_module:
         try:
-            params = load_params(opts.defines)
+            params = load_params(opts.vars_module)
         except ImportError:
-            write_err('genstatic: Cannot import definition module/file "%s"\n' % str(opts.defines))
+            write_err('genstatic: Cannot import definition module/file "%s"\n' % str(opts.vars_module))
     main(opts, srcdir, outdir, params)
