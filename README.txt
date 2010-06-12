@@ -1,8 +1,8 @@
 genstatic - Generate and maintain large sets of static HTML files, without going insane
 
 Genstatic is a tool for generating and managing sets of static HTML
-files using the Django template system.  It exists to save web
-designers like yourself time and sanity.
+(or other text format) files using the Django template system.  It
+exists to save web designers time and sanity.
 
 It's useful when you need to create a set of HTML files sharing
 structural similarities, in a low-maintenance way.  You can do things
@@ -10,7 +10,7 @@ like change the doctype of 100 different HTML files, or change the
 year of the copyright date in all their footers, by making a minor
 change to one file.
 
-It's also proved EXTREMELY useful when, as a web designer, you are
+It's also proven EXTREMELY useful when, as a web designer, you are
 serving a client who hands you a very messy folder of static files for
 their existing website.  You can use genstatic to bring order to that
 chaos, and modify them with much less time and duplication of your
@@ -35,17 +35,17 @@ For a full list of options, execute "genstatic.py -h".
 srcdir and destdir are directories.  srcdir contains files - HTML,
 CSS, Javascript, etc. - in the form of Django templates.  It normally
 also contains a magic subdirectory, named "_" (underscore), that can
-contain inheritable base templates.  These are files you create.
+contain inheritable base templates.  These are all files you create.
 
-Files in srcdir, other than those in "_", are rendered as Django
-template, and written into destdir (which is created, and by default,
+Files in srcdir, other than those under "_", are rendered as Django
+templates, and written into destdir (which is created, and by default,
 not overwritten.  Override that with the --clobber option.)
 
 Not all files will be rendered this way: only those with certain
-filename extensions.  (By default, it's "htm", "html" and "css".)
-Files that don't match this are just copied straight through.  You can
-tell genstatic to match a different set of extensions with the -x
-option.
+filename extensions.  (By default, it's "htm", "html", "txt" and
+"css".)  Files that don't match this are just copied straight through.
+You can tell genstatic to match a different set of extensions with the
+-x option.
 
 Often, you will like to set variable names and values that are
 available to the templates.  Create a python file that defines these

@@ -7,6 +7,13 @@ from optparse import OptionParser
 
 USAGE_MSG = 'usage: [-c] %s templates_dir dest_dir'
 
+EXTENSIONS = [
+    'htm',
+    'html',
+    'css',
+    'txt',
+    ]
+
 class GSOptionParser(OptionParser):
     '''
     command line option parser
@@ -18,7 +25,7 @@ class GSOptionParser(OptionParser):
                         help='If dest_dir exists, erase it and recreate');
         self.add_option('-v', '--vars-module', default=None,
                         help='Module with variable definitions for template');
-        self.add_option('-x', '--extensions', default='htm,html,css',
+        self.add_option('-x', '--extensions', default=','.join(EXTENSIONS),
                         help='Filename extensions to render as templates (comma-separated list)');
 
 def write_err(msg):
