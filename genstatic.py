@@ -70,12 +70,9 @@ def init_django(base):
     from django.conf import settings
     settings.configure(TEMPLATE_DIRS=(base,))
 
-def dj_render(base, path, dest, params=None):
+def dj_render(path, dest, params=None):
     '''
     Render a file using the Django template engine
-
-    @param base   : path to template base directory
-    @type  base   : str
 
     @param path   : path of template RELATIVE to base
     @type  path   : str
@@ -137,7 +134,7 @@ def process(base, outdir, params):
         mkdir(os.path.dirname(dest))
         try:
             if is_renderable(item):
-                dj_render(base, item, dest, params)
+                dj_render(item, dest, params)
             else:
                 shutil.copyfile(os.path.join(base, item), dest)
         except Exception, e:
