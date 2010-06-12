@@ -142,6 +142,7 @@ def process(base, outdir, extensions, params):
             else:
                 shutil.copyfile(os.path.join(base, item), dest)
         except Exception, e:
+            # This is a broad catch because we don't want any unanticipated error to stop the processing
             write_err("ERROR: %s: %s" % (item, e))
 
 def path2mod(filepath):
