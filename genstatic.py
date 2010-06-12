@@ -19,7 +19,7 @@ class GSOptionParser(OptionParser):
         self.add_option('-v', '--vars-module', default=None,
                         help='Module with variable definitions for template');
         self.add_option('-x', '--extensions', default='htm,html,css',
-                        help='Filename extensions to render as templates');
+                        help='Filename extensions to render as templates (comma-separated list)');
 
 def write_err(msg):
     '''
