@@ -176,8 +176,7 @@ def load_params(modulearg):
     @raise ImportError : The module could not be loaded.
 
     '''
-    if modulearg is None:
-        return {}
+    assert bool(modulearg)
     import imp
     fp = None
     loaded = None
@@ -240,9 +239,10 @@ if '__main__' == __name__:
         srcdir, outdir = args[0], args[1]
     except IndexError:
         exit_usage()
-    try:
-        params = load_params(opts.defines)
-    except ImportError:
-        write_err('genstatic: Cannot import definition module/file "%s"\n' % str(opts.defines))
-        params = {}
+    params = {}
+    if opts.defines:
+        try:
+            params = load_params(opts.defines)
+        except ImportError:
+            write_err('genstatic: Cannot import definition module/file "%s"\n' % str(opts.defines))
     main(opts, srcdir, outdir, params)
