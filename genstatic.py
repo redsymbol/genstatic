@@ -108,7 +108,16 @@ def mkdir(path):
         # Ignore it if the file already exists
         if 17 != e.errno:
             raise
-    
+
+def is_renderable(item):
+    endings = (
+        '.htm',
+        '.html',
+        '.php',
+        )
+    return any(item.endswith(ending)
+               for ending in endings)
+
 def process(base, outdir, params):
     '''
     Render and write all output files
@@ -127,7 +136,7 @@ def process(base, outdir, params):
         dest = os.path.join(outdir, item)
         mkdir(os.path.dirname(dest))
         try:
-            if item.endswith('.htm') or item.endswith('.html') or item.endswith('.php'):
+            if is_renderable(item):
                 dj_render(base, item, dest, params)
             else:
                 shutil.copyfile(os.path.join(base, item), dest)
