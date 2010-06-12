@@ -18,6 +18,8 @@ class GSOptionParser(OptionParser):
                         help='If dest_dir exists, erase it and recreate');
         self.add_option('-v', '--vars-module', default=None,
                         help='Module with variable definitions for template');
+        self.add_option('-x', '--extensions', default='htm,html,css',
+                        help='Filename extensions to render as templates');
 
 def write_err(msg):
     '''
@@ -106,16 +108,11 @@ def mkdir(path):
         if 17 != e.errno:
             raise
 
-def is_renderable(item):
-    endings = (
-        '.htm',
-        '.html',
-        '.php',
-        )
-    return any(item.endswith(ending)
+def is_renderable(item, endings):
+    return any(item.endswith('.' + ending)
                for ending in endings)
 
-def process(base, outdir, params):
+def process(base, outdir, extensions, params):
     '''
     Render and write all output files
 
@@ -133,7 +130,7 @@ def process(base, outdir, params):
         dest = os.path.join(outdir, item)
         mkdir(os.path.dirname(dest))
         try:
-            if is_renderable(item):
+            if is_renderable(item, extensions):
                 dj_render(item, dest, params)
             else:
                 shutil.copyfile(os.path.join(base, item), dest)
@@ -217,7 +214,8 @@ def main(opts, base, outdir, params):
     '''
     init_django(base)
     mkdir(outdir)
-    process(base, outdir, params)
+    extensions = opts.extensions.split(',')
+    process(base, outdir, extensions, params)
 
 def exit_usage(retcode=0):
     '''
