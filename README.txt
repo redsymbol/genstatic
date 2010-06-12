@@ -44,8 +44,8 @@ not overwritten.  Override that with the --clobber option.)
 Not all files will be rendered this way: only those with certain
 filename extensions.  (By default, it's "htm", "html" and "css".)
 Files that don't match this are just copied straight through.  You can
-tell genstatic to match a different set of extensions with the -x or
--X options.
+tell genstatic to match a different set of extensions with the -x
+option.
 
 Often, you will like to set variable names and values that are
 available to the templates.  Create a python file that defines these
