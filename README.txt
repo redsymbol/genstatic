@@ -32,19 +32,25 @@ Usage:
 
 For a full list of options, execute "genstatic.py -h".
 
-srcdir and destdir are directories.  srcdir contains static files and
-Django templates.  It normally also contains a magic subdirectory,
-named "_" (underscore), that can contain inheritable base templates.
-These are files you create.
+srcdir and destdir are directories.  srcdir contains files - HTML,
+CSS, Javascript, etc. - in the form of Django templates.  It normally
+also contains a magic subdirectory, named "_" (underscore), that can
+contain inheritable base templates.  These are files you create.
 
-Every file in srcdir, other than those in "_", is rendered as a Django
+Files in srcdir, other than those in "_", are rendered as Django
 template, and written into destdir (which is created, and by default,
 not overwritten.  Override that with the --clobber option.)
 
+Not all files will be rendered this way: only those with certain
+filename extensions.  (By default, it's "htm", "html" and "css".)
+Files that don't match this are just copied straight through.  You can
+tell genstatic to match a different set of extensions with the -x or
+-X options.
+
 Often, you will like to set variable names and values that are
 available to the templates.  Create a python file that defines these
-variables - for example, "myparams.py" .  Then pass this file name
-with the -d option to genstatic.
+variables - for example, "myparams.py". Then pass this file name with
+the -v option to genstatic.
 
 (You must use Python syntax in this file.  Not a "Pythonista"? Don't
 worry; if you're the type of person who wants to use genstatic, you
@@ -98,7 +104,7 @@ You also create a file named vars.py that just contains this line:
 copydate=2010
 
 Simply invoke on the command line:
-  genstatic.py -d copydate.py srcdir destdir
+  genstatic.py -v copydate.py srcdir destdir
 
 destdir is created, containing index.html and about.html, and that's
 it;  base.html is omitted.  Here's what those two files will contain:
@@ -162,7 +168,7 @@ contact Mobile Web Up today.
 
 APPENDIX A: PYTHON VARIABLES
 
-To make varibles available to genstatic (with the -d option), you'll
+To make varibles available to genstatic (with the -v option), you'll
 have to create a small Python file that defines some variables and
 their values.  It's not too hard.
 
