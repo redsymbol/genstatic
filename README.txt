@@ -33,9 +33,10 @@ Usage:
 For a full list of options, execute "genstatic.py -h".
 
 srcdir and destdir are directories.  srcdir contains files - HTML,
-CSS, Javascript, etc. - in the form of Django templates.  It normally
-also contains a magic subdirectory, named "_" (underscore), that can
-contain inheritable base templates.  These are all files you create.
+CSS, Javascript, images, etc. Some or all of these files may be Django
+templates.  srcdir normally also contains a magic subdirectory, named "_"
+(underscore), that can contain inheritable base templates.  These are
+all files you create.
 
 Files in srcdir, other than those under "_", are rendered as Django
 templates, and written into destdir (which is created, and by default,
