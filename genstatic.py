@@ -176,6 +176,8 @@ def load_params(modulearg):
     @raise ImportError : The module could not be loaded.
 
     '''
+    if modulearg is None:
+        return {}
     import imp
     fp = None
     loaded = None
