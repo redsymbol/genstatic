@@ -5,8 +5,6 @@ import shutil
 import sys
 from optparse import OptionParser
 
-USAGE_MSG = 'usage: [-c] %s templates_dir dest_dir'
-
 EXTENSIONS = [
     'htm',
     'html',
@@ -14,13 +12,28 @@ EXTENSIONS = [
     'txt',
     ]
 
+def usage_msg(progname):
+    '''
+    Emit helpful (multiline) usage message
+
+    @param progname : Name of this program
+    @type  progname : str
+
+    @return : Usage message
+    @rtype  : str
+    
+    '''
+    return '''Usage:
+  %(progname)s [options] templates_dir dest_dir
+Run "%(progname)s -h" for full help.''' % {'progname' : progname}
+
 class GSOptionParser(OptionParser):
     '''
     command line option parser
     '''
     def __init__(self):
         OptionParser.__init__(self)
-        self.set_usage(USAGE_MSG % '%prog')
+        self.set_usage(usage_msg('%prog'))
         self.add_option('-c', '--clobber', action='store_true', default=False,
                         help='If dest_dir exists, erase it and recreate');
         self.add_option('-v', '--vars-module', default=None,
@@ -233,7 +246,7 @@ def exit_usage(retcode=0):
     @type  retcode : int
     
     '''
-    print USAGE_MSG % os.path.basename(sys.argv[0])
+    print usage_msg(os.path.basename(sys.argv[0]))
     sys.exit(retcode)
 
 if '__main__' == __name__:
