@@ -5,6 +5,7 @@ import shutil
 import sys
 from optparse import OptionParser
 
+#: Default file name extensions
 EXTENSIONS = [
     'htm',
     'html',
@@ -32,14 +33,15 @@ class GSOptionParser(OptionParser):
     command line option parser
     '''
     def __init__(self):
+        default_extensions = ','.join(EXTENSIONS)
         OptionParser.__init__(self)
         self.set_usage(usage_msg('%prog'))
         self.add_option('-c', '--clobber', action='store_true', default=False,
                         help='If dest_dir exists, erase it and recreate');
         self.add_option('-v', '--vars-module', default=None,
                         help='Module with variable definitions for template');
-        self.add_option('-x', '--extensions', default=','.join(EXTENSIONS),
-                        help='Filename extensions to render as templates (comma-separated list)');
+        self.add_option('-x', '--extensions', default=default_extensions,
+                        help='Filename extensions to render as templates (comma-separated list).  Default: "%s"' % default_extensions);
 
 def write_err(msg):
     '''
