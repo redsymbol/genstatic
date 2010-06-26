@@ -1,4 +1,4 @@
-genstatic - Generate and maintain large sets of static HTML files, without going insane
+genstatic - Generate and maintain static HTML files with Django templates
 
 Genstatic is a tool for generating and managing sets of static HTML
 (or other text format) files using the Django template system.  It
