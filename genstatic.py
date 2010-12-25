@@ -37,11 +37,13 @@ class GSOptionParser(OptionParser):
         OptionParser.__init__(self)
         self.set_usage(usage_msg('%prog'))
         self.add_option('-c', '--clobber', action='store_true', default=False,
-                        help='If dest_dir exists, erase it and recreate');
+                        help='If dest_dir exists, erase it and recreate')
         self.add_option('-v', '--vars', default=None,
-                        help='Variable definitions for template');
+                        help='Variable definitions for template')
         self.add_option('-x', '--extensions', default=default_extensions,
-                        help='Filename extensions to render as templates (comma-separated list).  Default: "%s"' % default_extensions);
+                        help='Filename extensions to render as templates (comma-separated list).  Default: "%s"' % default_extensions)
+        self.add_option('-X', '--extra-extensions', default=None,
+                        help='Extra extensions to render as templates (comma-separated list), in addition to defaults');
 
 def write_err(msg):
     '''
@@ -238,6 +240,8 @@ def main(opts, base, outdir, params):
     init_django(base)
     mkdir(outdir)
     extensions = opts.extensions.split(',')
+    if opts.extra_extensions:
+        extensions += opts.extra_extensions.split(',')
     process(base, outdir, extensions, params)
 
 def exit_usage(retcode=0):
