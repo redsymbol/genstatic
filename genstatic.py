@@ -153,9 +153,13 @@ def process(base, outdir, extensions, params):
     for item in find_files(base):
         dest = os.path.join(outdir, item)
         mkdir(os.path.dirname(dest))
+        item_params = dict(params)
+        item_params.update({
+                'gs_templatepath' : item,
+                })
         try:
             if is_renderable(item, extensions):
-                dj_render(item, dest, params)
+                dj_render(item, dest, item_params)
             else:
                 shutil.copyfile(os.path.join(base, item), dest)
         except Exception, e:
