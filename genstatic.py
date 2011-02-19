@@ -155,12 +155,12 @@ def process(base, outdir, extensions, params):
         mkdir(os.path.dirname(dest))
         item_params = dict(params)
         try:
-            gs_templateparams = params['gs_templateparams'][item]
+            gs_pagevars = params['gs_pagevars'][item]
         except (KeyError, TypeError):
-            gs_templateparams = {}
+            gs_pagevars = {}
         item_params.update({
-                'gs_templatepath' : item,
-                'gs_templateparams' : gs_templateparams,
+                'gs_path' : item,
+                'gs_pagevars' : gs_pagevars,
                 })
         try:
             if is_renderable(item, extensions):
