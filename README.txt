@@ -58,12 +58,15 @@ worry; if you're the type of person who wants to use genstatic, you
 will probably find the variable syntax very easy to pick up.  See
 Appendix A for a primer.)
 
+Variable names starting with "gs_" are magic Genstatic variables with
+special properties.  More on those below.
+
 HOW ABOUT AN EXAMPLE
 
 Suppose srcdir contains the files index.html, about.html, and
 _/base.html, with the following contents:
 
-_/base.html:
+# _/base.html:
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
   <head>
@@ -82,7 +85,7 @@ _/base.html:
 </html>
 # end of _/base.html
 
-index.html:
+# index.html:
 {% extends "_/base.html" %}
 {% block title %}Welcome to Joe's Widget Shop{% endblock %}
 {% block content %}
@@ -91,7 +94,7 @@ index.html:
 {% endblock %}
 # end of index.html
 
-about.html:
+# about.html:
 {% extends "_/base.html" %}
 {% block title %}About Joe's Widget Shop{% endblock %}
 {% block content %}
@@ -110,7 +113,7 @@ Simply invoke on the command line:
 destdir is created, containing index.html and about.html, and that's
 it;  base.html is omitted.  Here's what those two files will contain:
 
-index.html:
+# index.html:
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
   <head>
@@ -128,7 +131,7 @@ index.html:
 </html>
 # end of index.html
 
-about.html:
+# about.html:
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
   <head>
@@ -146,6 +149,103 @@ with widgets as far as the eye could see. It wasn't long before...</p>
   </body>
 </html>
 # end of about.html
+
+MAGIC VARIABLES
+
+In your variable definitions file (the one passed to the -v option),
+variables whose name starts with "gs_" are reserved for magical
+purposes.  There two defined right now: gs_path and gs_pagevars.
+
+* GS_PATH
+
+The value of gs_path is the path to the template being rendered,
+relative to the base.  You're not allowed to set gs_path; instead, it
+will just be available in your templates.
+
+So suppose that in your source directory, the file
+introspective/filename.html contains this content:
+
+# introspective/filename.html:
+This template is at {{gs_path}}.
+# end of introspective/filename.html
+
+That will render as:
+# rendered introspective/filename.html:
+This template is at introspective/filename.html.
+# end of rendered introspective/filename.html
+
+Note that gs_path points to the final path of the file.  So if you
+include or extend a template, gs_path is not the path of that included
+template:
+
+# _/base.html:
+<h1>{{gs_path}}</h1>
+{% block content %}{% endblock %}
+# end of _/base.html
+
+# target.html:
+{% extends "_/base.html" %}
+{% block content %}
+<p>Hello.</p>
+{% endblock %}
+# end of target.html
+
+Then target.html will render like this:
+
+# render of target.html:
+<h1>target.html</h1>
+<p>Hello.</p>
+# end render of target.html
+
+* GS_PAGEVARS
+
+You define gs_pagevars in your variable definition file.  It lets you
+specify customized or alternative variables for specific pages.  Its
+type is a dictionary (associative array), mapping strings to other
+dictionaries.
+
+Each key of gs_pagevar is a path to a template: the value of gs_path
+for that page, essentially.  The value is a dictionary mapping
+variable names (strings) to any type of value.  These variables are
+then added to the template parameter set for only that page.
+
+Here's an example.  Suppose that you have three pages, one.html,
+two.html, and another-one.html.  The first and last have basically the
+same content.  You don't want to get some kind of duplicate content
+penalty in search engine results, so you want to indicate that the
+former is the canonical version, using the "rel=canonical" meta tag.
+In vars.py, you can define this:
+
+# vars.py:
+gs_pagevars = {
+  'another-one.html' : { 'canonical' : 'http://example.com/one.html'},
+}
+# end vars.py
+
+Suppose that all these HTML files inherit from a common "_/base.html"
+template.  You can place this text in the <head> element:
+
+# begin
+{% if gs_pagevars.canonical %}
+<link rel="canonical" href="{{gs_pagevars.canonical}}"/>
+{% endif %}
+# end
+
+Then another-one.html will render with the this line in its head element:
+# begin
+<link rel="canonical" href="http://example.com/one.html"/>
+# end
+
+This line will be absent from the other templates.  Later, if you want
+to add a new page "another-two.html" with a similar relationship, you
+can just add a line to gs_pagevars:
+
+# vars.py:
+gs_pagevars = {
+  'another-one.html' : { 'canonical' : 'http://example.com/one.html'},
+  'another-two.html' : { 'canonical' : 'http://example.com/two.html'},
+}
+# end vars.py
 
 LICENSE
 
